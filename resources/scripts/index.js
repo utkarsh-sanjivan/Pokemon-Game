@@ -2,6 +2,10 @@ let currentPos = { cordX: 0, cordY: 0, cenX: 10, cenY: 10 };
 let pokeBallPos = [];
 let score = 0;
 let canvas = {};
+var rightPressed = false;
+var leftPressed = false;
+var upPressed = false;
+var downPressed = false;
 
 (function(window, document, undefined){
     window.onload = init;
@@ -27,7 +31,7 @@ let canvas = {};
                         const ctx = canvas.getContext('2d');
                         const cordX = Math.round(Math.random()*(canvas.width-20));
                         const cordY = Math.round(Math.random()*(canvas.height-20));
-                        if (!checkPokeBallAvailability(cordX+10, cordY+10)) {
+                        if (!checkPokeBallAvailability(cordX+10, cordY+10) && getDistance(currentPos.cordX, currentPos.cordY, cordX+10, cordY+10) > 20) {
                             pokeBallPos.push({ cordX, cordY, cenX: cordX+10, cenY: cordY+10 });
                         };
                         pokeBallPos.forEach(ballPos => drawPokeBall(ctx, ballPos.cordX, ballPos.cordY));
@@ -35,6 +39,9 @@ let canvas = {};
                     }
                 }, 3000);
             };
+            setInterval(update, 50);		
+            document.addEventListener("keydown",keyDownHandler, false);	
+		    document.addEventListener("keyup",keyUpHandler, false);	
         };
     }
 
@@ -96,7 +103,7 @@ function calculateScore() {
 function catchPokeBall(cenX, cenY) {
     let newPokeBallPos = [];
     pokeBallPos.forEach(ballPos => {
-        if (getDistance(ballPos.cenX, ballPos.cenY, cenX, cenY) < 5) {
+        if (getDistance(ballPos.cenX, ballPos.cenY, cenX, cenY) < 10) {
             calculateScore();
         } else {
             newPokeBallPos.push(ballPos);
@@ -116,29 +123,61 @@ function checkPos(cordX, cordY) {
     return { cordX: x, cordY: y, cenX: x+10, cenY: y+10 };
 }
 
-document.addEventListener('keydown', function(e) {
+function update() {
     const canvas = document.getElementById('game');   
     const ctx = canvas.getContext('2d');
-    switch (e.keyCode) {
-        case 37:
-            currentPos = checkPos(currentPos.cordX-5, currentPos.cordY );
-            break;
-        case 38:
-            currentPos = checkPos(currentPos.cordX, currentPos.cordY-5 );
-            break;
-        case 39:
-            currentPos = checkPos(currentPos.cordX+5, currentPos.cordY );
-            break;
-        case 40:
-            currentPos = checkPos(currentPos.cordX, currentPos.cordY+5 );
-            break;
-        default:
-            break;
-    };
+    
     if (canvas) {
         ctx.fillStyle = '#95c262';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+        let { cordX, cordY } = currentPos;
+        if(rightPressed) {
+            cordX += 5;
+        }
+        else if(leftPressed) {
+            cordX -= 5;
+        }
+        if(downPressed) {
+            cordY += 5;
+        }
+        else if(upPressed) {
+            cordY -= 5;
+        }
+        currentPos = checkPos(cordX, cordY);
         pokeBallPos.forEach(ballPos => drawPokeBall(ctx, ballPos.cordX, ballPos.cordY));
         drawPokemon(ctx, currentPos.cordX, currentPos.cordY);
     }
-});
+
+}
+
+function keyDownHandler(event)
+{
+	if(event.keyCode == 39) {
+        rightPressed = true;
+    }
+    else if(event.keyCode == 37) {
+        leftPressed = true;
+    }
+    if(event.keyCode == 40) {
+    	downPressed = true;
+    }
+    else if(event.keyCode == 38) {
+    	upPressed = true;
+    }
+}
+
+function keyUpHandler(event)
+{
+	if(event.keyCode == 39) {
+        rightPressed = false;
+    }
+    else if(event.keyCode == 37) {
+        leftPressed = false;
+    }
+    if(event.keyCode == 40) {
+    	downPressed = false;
+    }
+    else if(event.keyCode == 38) {
+    	upPressed = false;
+    }
+}
