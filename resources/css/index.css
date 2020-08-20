@@ -1,0 +1,72 @@
+* {
+	font-family: Helvetica, Arial, sans-serif;
+    margin: 0px;
+}
+
+.board {
+	background-color: black;
+	min-height: 100vh;
+	display: flex;
+}
+
+.game {
+	/* width: 60%;
+    height: 100vh; */
+	width: 60%;
+    height: 80vh;
+    margin: 10vh 0;
+}
+
+.side-bar {
+	width: 20%;
+	position: relative;
+}
+
+.start-button {
+    position: absolute;
+    top: 40%;
+    left: 30%;
+	width: 40%;
+	height: 5%;
+	cursor: pointer;
+	background-color: #48a1d1;
+	color: #fff;
+	font-weight: 600;
+	font-size: 14px;
+	border: none;
+	border-radius: 3px;
+	letter-spacing: 0.8px;
+}
+
+.score-display {
+	position: absolute;
+    top: 50%;
+    left: 32.5%;
+	min-width: 35%;
+    background-color: #fff;
+    color: #ff0000;
+    border-radius: 3px;
+    border: none;
+	display: flex;
+}
+
+.score-hundreth {
+	width: 33%;
+	font-weight: 600;
+    font-size: 40px;
+    font-family: Orbitron;
+}
+
+.score-tenth {
+	width: 33%;
+	font-weight: 600;
+    font-size: 40px;
+    font-family: Orbitron;
+}
+
+.score-one {
+	width: 33%;
+	font-weight: 600;
+    font-size: 40px;
+    font-family: Orbitron;
+}

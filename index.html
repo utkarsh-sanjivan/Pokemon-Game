@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gotta Catch em All!</title>
+    <link href="./resources/css/index.css" type="text/css" rel="stylesheet">
+    <link rel="icon" href="./resources/images/pokeball.png"/>
+    <link href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css'>
+    <script src="./resources/scripts/index.js" type="text/javascript"></script>
+</head>
+<body>
+    <div class='board' id='board'>
+        <div class='side-bar'>
+            <div class='score-display' id='score-display'>
+                <div class='score-hundreth' id='score-hundreth'></div>
+                <div class='score-tenth' id='score-tenth'></div>
+                <div class='score-one' id='score-one'></div>
+            </div>
+            <button class='start-button' onclick='onRestart()'>Restart</button>
+        </div>
+        <canvas class='game' id='game' name='game'></canvas>
+        <div class='side-bar'>
+        </div>
+    </div>
+</body>
+</html>
