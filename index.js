@@ -2,18 +2,42 @@ let currentPos = { cordX: 0, cordY: 0, cenX: 10, cenY: 10 };
 let pokeBallPos = [];
 let score = 0;
 let canvas = {};
-var rightPressed = false;
-var leftPressed = false;
-var upPressed = false;
-var downPressed = false;
+let rightPressed = false;
+let leftPressed = false;
+let upPressed = false;
+let downPressed = false;
+
+let pokemonImage = new Image();
+pokemonImage.ready = false;
+pokemonImage.onload = setAssetReady;
+pokemonImage.src = 'images/pokemon.png';
+let pokeBallImage = new Image();
+pokeBallImage.ready = false;
+pokeBallImage.onload = setAssetReady;
+pokeBallImage.src = 'images/pokeball.png';
+
+pokeBallImage.onload = function() {
+    setInterval(() => {
+        if (pokeBallPos.length<5) {
+            const ctx = canvas.getContext('2d');
+            const cordX = Math.round(Math.random()*(canvas.width-20));
+            const cordY = Math.round(Math.random()*(canvas.height-20));
+            if (!checkPokeBallAvailability(cordX+10, cordY+10) && getDistance(currentPos.cordX, currentPos.cordY, cordX+10, cordY+10) > 20) {
+                pokeBallPos.push({ cordX, cordY, cenX: cordX+10, cenY: cordY+10 });
+            };
+            pokeBallPos.forEach(ballPos => drawPokeBall(ctx, ballPos.cordX, ballPos.cordY));
+            drawPokemon(ctx, currentPos.cordX, currentPos.cordY);
+        }
+    }, 3000);
+};
+
+function setAssetReady() {
+	this.ready = true;
+}
 
 (function(window, document, undefined){
     window.onload = init;
     function init(){
-        var imgPokemon = new Image(20, 20);
-        var imgPokeBall = new Image(20, 20);
-        imgPokemon.src = 'https://static.pokemonpets.com/images/monsters-images-800-800/93-Haunter.png';
-        imgPokeBall.src = 'https://pngimg.com/uploads/pokeball/pokeball_PNG2.png';
         canvas = document.getElementById('game');
         document.getElementById('score-hundreth').innerHTML = '0';
         document.getElementById('score-tenth').innerHTML = '0';
@@ -22,23 +46,23 @@ var downPressed = false;
             const ctx = canvas.getContext('2d');
             ctx.fillStyle = '#95c262';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            imgPokemon.onload = function() {
+            pokemonImage.onload = function() {
                 drawPokemon(ctx, 0, 0);
             };
-            imgPokeBall.onload = function() {
-                setInterval(() => {
-                    if (pokeBallPos.length<5) {
-                        const ctx = canvas.getContext('2d');
-                        const cordX = Math.round(Math.random()*(canvas.width-20));
-                        const cordY = Math.round(Math.random()*(canvas.height-20));
-                        if (!checkPokeBallAvailability(cordX+10, cordY+10) && getDistance(currentPos.cordX, currentPos.cordY, cordX+10, cordY+10) > 20) {
-                            pokeBallPos.push({ cordX, cordY, cenX: cordX+10, cenY: cordY+10 });
-                        };
-                        pokeBallPos.forEach(ballPos => drawPokeBall(ctx, ballPos.cordX, ballPos.cordY));
-                        drawPokemon(ctx, currentPos.cordX, currentPos.cordY);
-                    }
-                }, 3000);
-            };
+            // pokeBallImage.onload = function() {
+            //     setInterval(() => {
+            //         if (pokeBallPos.length<5) {
+            //             const ctx = canvas.getContext('2d');
+            //             const cordX = Math.round(Math.random()*(canvas.width-20));
+            //             const cordY = Math.round(Math.random()*(canvas.height-20));
+            //             if (!checkPokeBallAvailability(cordX+10, cordY+10) && getDistance(currentPos.cordX, currentPos.cordY, cordX+10, cordY+10) > 20) {
+            //                 pokeBallPos.push({ cordX, cordY, cenX: cordX+10, cenY: cordY+10 });
+            //             };
+            //             pokeBallPos.forEach(ballPos => drawPokeBall(ctx, ballPos.cordX, ballPos.cordY));
+            //             drawPokemon(ctx, currentPos.cordX, currentPos.cordY);
+            //         }
+            //     }, 3000);
+            // };
             setInterval(update, 50);		
             document.addEventListener("keydown",keyDownHandler, false);	
 		    document.addEventListener("keyup",keyUpHandler, false);	
@@ -62,8 +86,8 @@ function onRestart() {
 }
 
 function getDistance(xA, yA, xB, yB) { 
-	var xDiff = xA - xB; 
-	var yDiff = yA - yB; 
+	let xDiff = xA - xB; 
+	let yDiff = yA - yB; 
 
 	return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
 }
@@ -73,15 +97,11 @@ function checkPokeBallAvailability(x, y) {
 }
 
 function drawPokemon(ctx, x,y) {
-    var img = new Image(20, 20);
-    img.src = 'https://static.pokemonpets.com/images/monsters-images-800-800/93-Haunter.png';
-    ctx.drawImage(img, x, y, 20, 20);
+    ctx.drawImage(pokemonImage, x, y, 20, 20);
 }
 
 function drawPokeBall(ctx, x,y) {
-    var img = new Image(20, 20);
-    img.src = 'https://pngimg.com/uploads/pokeball/pokeball_PNG2.png';
-    ctx.drawImage(img, x, y, 20, 20);
+    ctx.drawImage(pokeBallImage, x, y, 20, 20);
 }
 
 function getScoreTextObj(score) {
@@ -150,34 +170,32 @@ function update() {
 
 }
 
-function keyDownHandler(event)
-{
-	if(event.keyCode == 39) {
+function keyDownHandler(event) {
+	if(event.keyCode == 39 || event.keyCode == 68) {
         rightPressed = true;
     }
-    else if(event.keyCode == 37) {
+    else if(event.keyCode == 37 || event.keyCode == 65) {
         leftPressed = true;
     }
-    if(event.keyCode == 40) {
+    if(event.keyCode == 40 || event.keyCode == 83) {
     	downPressed = true;
     }
-    else if(event.keyCode == 38) {
+    else if(event.keyCode == 38 || event.keyCode == 87) {
     	upPressed = true;
     }
 }
 
-function keyUpHandler(event)
-{
-	if(event.keyCode == 39) {
+function keyUpHandler(event) {
+	if(event.keyCode == 39 || event.keyCode == 68) {
         rightPressed = false;
     }
-    else if(event.keyCode == 37) {
+    else if(event.keyCode == 37 || event.keyCode == 65) {
         leftPressed = false;
     }
-    if(event.keyCode == 40) {
+    if(event.keyCode == 40 || event.keyCode == 83) {
     	downPressed = false;
     }
-    else if(event.keyCode == 38) {
+    else if(event.keyCode == 38 || event.keyCode == 87) {
     	upPressed = false;
     }
 }
