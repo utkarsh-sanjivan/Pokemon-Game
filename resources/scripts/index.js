@@ -41,12 +41,17 @@ let canvas = {};
 })(window, document, undefined);
 
 function onRestart() {
+    const ctx = canvas.getContext('2d');
     currentPos = { cordX: 0, cordY: 0, cenX: 10, cenY: 10 };
     pokeBallPos = [];
     score = 0;
+    ctx.fillStyle = '#95c262';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     document.getElementById('score-hundreth').innerHTML = '0';
     document.getElementById('score-tenth').innerHTML = '0';
     document.getElementById('score-one').innerHTML = '0';
+    pokeBallPos.forEach(ballPos => drawPokeBall(ctx, ballPos.cordX, ballPos.cordY));
+    drawPokemon(ctx, currentPos.cordX, currentPos.cordY);
 }
 
 function getDistance(xA, yA, xB, yB) { 
