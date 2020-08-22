@@ -49,20 +49,6 @@ function setAssetReady() {
             pokemonImage.onload = function() {
                 drawPokemon(ctx, 0, 0);
             };
-            // pokeBallImage.onload = function() {
-            //     setInterval(() => {
-            //         if (pokeBallPos.length<5) {
-            //             const ctx = canvas.getContext('2d');
-            //             const cordX = Math.round(Math.random()*(canvas.width-20));
-            //             const cordY = Math.round(Math.random()*(canvas.height-20));
-            //             if (!checkPokeBallAvailability(cordX+10, cordY+10) && getDistance(currentPos.cordX, currentPos.cordY, cordX+10, cordY+10) > 20) {
-            //                 pokeBallPos.push({ cordX, cordY, cenX: cordX+10, cenY: cordY+10 });
-            //             };
-            //             pokeBallPos.forEach(ballPos => drawPokeBall(ctx, ballPos.cordX, ballPos.cordY));
-            //             drawPokemon(ctx, currentPos.cordX, currentPos.cordY);
-            //         }
-            //     }, 3000);
-            // };
             setInterval(update, 50);		
             document.addEventListener("keydown",keyDownHandler, false);	
 		    document.addEventListener("keyup",keyUpHandler, false);	
